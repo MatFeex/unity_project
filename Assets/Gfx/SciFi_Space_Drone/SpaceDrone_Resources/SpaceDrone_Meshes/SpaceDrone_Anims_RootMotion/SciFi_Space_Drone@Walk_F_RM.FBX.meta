@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: c87502bdf8221014dbde36cb6e0cba0c
-timeCreated: 1468453809
+guid: 68621e00e8526d342b517bf1247d8e33
+timeCreated: 1451910572
 licenseType: Store
 ModelImporter:
   serializedVersion: 19
@@ -13,12 +13,8 @@ ModelImporter:
     100010: Bone008
     100012: Bone009
     100014: Bone011
-    100016: Pod_Weapon_L
-    100018: Pod_Weapon_L_Tip
-    100020: Pod_Weapon_R
-    100022: Pod_Weapon_R_Tip
-    100024: Root
-    100026: //RootNode
+    100016: //RootNode
+    100018: Root
     400000: Bone001
     400002: Bone002
     400004: Bone004
@@ -27,13 +23,9 @@ ModelImporter:
     400010: Bone008
     400012: Bone009
     400014: Bone011
-    400016: Pod_Weapon_L
-    400018: Pod_Weapon_L_Tip
-    400020: Pod_Weapon_R
-    400022: Pod_Weapon_R_Tip
-    400024: Root
-    400026: //RootNode
-    7400000: Death_A
+    400016: //RootNode
+    400018: Root
+    7400000: Walk_F_RM
     9500000: //RootNode
   materials:
     importMaterials: 0
@@ -49,7 +41,7 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -57,24 +49,24 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: Death_A
+      name: Walk_F_RM
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 75
+      lastFrame: 100
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
+      keepOriginalPositionXZ: 1
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -101,21 +93,13 @@ ModelImporter:
         weight: 1
       - path: Root/Bone011
         weight: 1
-      - path: Root/Pod_Weapon_L
-        weight: 1
-      - path: Root/Pod_Weapon_L/Pod_Weapon_L_Tip
-        weight: 1
-      - path: Root/Pod_Weapon_R
-        weight: 1
-      - path: Root/Pod_Weapon_R/Pod_Weapon_R_Tip
-        weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 0.5
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1
