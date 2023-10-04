@@ -24,6 +24,17 @@ public abstract class ArmyManager : MonoBehaviour
     [SerializeField] UnityEvent m_OnArmyIsDead;
 
     #region Allies Retrieval
+
+    public virtual GameObject Test() 
+    {
+        return null;
+    }
+
+    public virtual GameObject CommonTarget()
+    {
+        return null;
+    }
+
     public List<ArmyElement> GetAllAllies(bool sortRandom, ArmyElement allyBuyer)
     {
         var allies = GameObject.FindObjectsOfType<ArmyElement>().Where(element => element != allyBuyer && element.gameObject.CompareTag(m_ArmyTag)).ToList();
