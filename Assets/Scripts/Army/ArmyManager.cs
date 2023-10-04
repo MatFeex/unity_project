@@ -23,17 +23,20 @@ public abstract class ArmyManager : MonoBehaviour
 
     [SerializeField] UnityEvent m_OnArmyIsDead;
 
+    // MY FUNCTIONS
+
+    public virtual GameObject GetFirstDrone()
+    {
+        return null;
+    }
+
+    public virtual GameObject GetFirstTurret()
+    {
+        return null;
+    }
+
+
     #region Allies Retrieval
-
-    public virtual GameObject Test() 
-    {
-        return null;
-    }
-
-    public virtual GameObject CommonTarget()
-    {
-        return null;
-    }
 
     public List<ArmyElement> GetAllAllies(bool sortRandom, ArmyElement allyBuyer)
     {
