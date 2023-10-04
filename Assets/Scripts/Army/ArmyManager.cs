@@ -8,7 +8,7 @@ using UnityEngine.AI;
 using UnityEngine.Events;
 
 /*
-Pr�parer un terrain o� toutes les terrasses sont accessibles
+    Pr�parer un terrain o� toutes les terrasses sont accessibles
 */
 
 public abstract class ArmyManager : MonoBehaviour
@@ -61,7 +61,7 @@ public abstract class ArmyManager : MonoBehaviour
 
     #region Enemies Retrieval
     //all enemies
-    public List<ArmyElement> GetAllEnemies(bool sortRandom)
+    public virtual List<ArmyElement> GetAllEnemies(bool sortRandom)
     {
         var enemies = GameObject.FindObjectsOfType<ArmyElement>().Where(element => !element.gameObject.CompareTag(m_ArmyTag)).ToList();
         if (sortRandom) enemies.Sort((a, b) => Random.value.CompareTo(.5f));
@@ -129,7 +129,6 @@ public abstract class ArmyManager : MonoBehaviour
     public virtual IEnumerator Start()
     {
         yield return null; // on attend une frame que tous les objets aient �t� instanci�s ...
-
         GameObject[] allArmiesElements = GameObject.FindGameObjectsWithTag(m_ArmyTag);
         foreach (var item in allArmiesElements)
         {
@@ -137,7 +136,6 @@ public abstract class ArmyManager : MonoBehaviour
             armyElement.ArmyManager = this;
             m_ArmyElements.Add(armyElement);
         }
-
         RefreshHudDisplay();
 
         yield break;
