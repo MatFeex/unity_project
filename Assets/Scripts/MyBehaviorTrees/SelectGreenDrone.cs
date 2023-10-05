@@ -19,7 +19,7 @@ public class SelectGreenDrone : Action
 	{
 		if (m_ArmyElement.ArmyManager == null) return TaskStatus.Running; // la r�f�rence � l'arm�e n'a pas encore �t� inject�e
 
-		target.Value = m_ArmyElement.ArmyManager.GetFirstDrone()?.transform;
+		target.Value = m_ArmyElement.ArmyManager.GetTargetOfType<Drone>()?.transform;
 
 		if (target.Value != null) return TaskStatus.Success;
 		else return TaskStatus.Failure;

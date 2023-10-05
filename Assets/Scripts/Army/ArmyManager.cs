@@ -25,12 +25,27 @@ public abstract class ArmyManager : MonoBehaviour
 
     // MY FUNCTIONS
 
+    public string getTag()
+    {
+        return m_ArmyTag;
+    }
+
     public virtual GameObject GetFirstDrone()
     {
         return null;
     }
 
-    public virtual GameObject GetFirstTurret()
+    public virtual GameObject GetTargetOfType<T>() where T: ArmyElement
+    {
+        return null;
+    }
+
+    public virtual GameObject GetClosestEnemyInRadius(Vector3 centerPos, float radius)
+    {
+        return null;
+    }
+
+    public virtual GameObject GetTurretTarget()
     {
         return null;
     }
