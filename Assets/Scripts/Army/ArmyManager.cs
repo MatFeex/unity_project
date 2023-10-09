@@ -13,15 +13,24 @@ Pr�parer un terrain o� toutes les terrasses sont accessibles
 
 public abstract class ArmyManager : MonoBehaviour
 {
-    [SerializeField] string m_ArmyTag;
-    [SerializeField] Color m_ArmyColor;
+    [SerializeField]
+    string m_ArmyTag;
+
+    [SerializeField]
+    Color m_ArmyColor;
     protected List<IArmyElement> m_ArmyElements = new List<IArmyElement>();
 
-    [SerializeField] TMP_Text m_NDronesText;
-    [SerializeField] TMP_Text m_NTurretsText;
-    [SerializeField] TMP_Text m_HealthText;
+    [SerializeField]
+    TMP_Text m_NDronesText;
 
-    [SerializeField] UnityEvent m_OnArmyIsDead;
+    [SerializeField]
+    TMP_Text m_NTurretsText;
+
+    [SerializeField]
+    TMP_Text m_HealthText;
+
+    [SerializeField]
+    UnityEvent m_OnArmyIsDead;
 
     // MY FUNCTIONS
 
@@ -35,7 +44,8 @@ public abstract class ArmyManager : MonoBehaviour
         return null;
     }
 
-    public virtual GameObject GetTargetOfType<T>() where T: ArmyElement
+    public virtual GameObject GetTargetOfType<T>()
+        where T : ArmyElement
     {
         return null;
     }
@@ -50,13 +60,34 @@ public abstract class ArmyManager : MonoBehaviour
         return null;
     }
 
+    public virtual GameObject GetDroneTarget(Vector3 centerPos)
+    {
+        return null;
+    }
+
+    public virtual GameObject GetTurretToProtect(ArmyElement caller)
+    {
+        return null;
+    }
+
+    // ###################################
+
+
+
+
+
+
 
     #region Allies Retrieval
 
     public List<ArmyElement> GetAllAllies(bool sortRandom, ArmyElement allyBuyer)
     {
-        var allies = GameObject.FindObjectsOfType<ArmyElement>().Where(element => element != allyBuyer && element.gameObject.CompareTag(m_ArmyTag)).ToList();
-        if (sortRandom) allies.Sort((a, b) => Random.value.CompareTo(.5f));
+        var allies = GameObject
+            .FindObjectsOfType<ArmyElement>()
+            .Where(element => element != allyBuyer && element.gameObject.CompareTag(m_ArmyTag))
+            .ToList();
+        if (sortRandom)
+            allies.Sort((a, b) => Random.value.CompareTo(.5f));
         return allies;
     }
 
@@ -68,10 +99,12 @@ public abstract class ArmyManager : MonoBehaviour
 
     public GameObject GetRandomWeakAlly(ArmyElement allyBuyer)
     {
-        var weakAllies = GetAllAllies(true, allyBuyer).Where(item => {
-            Health health = item.GetComponentInChildren<Health>();
-            return health && health.Value < 100;
-        });
+        var weakAllies = GetAllAllies(true, allyBuyer)
+            .Where(item =>
+            {
+                Health health = item.GetComponentInChildren<Health>();
+                return health && health.Value < 100;
+            });
         return weakAllies.FirstOrDefault()?.gameObject;
     }
     #endregion
@@ -81,31 +114,56 @@ public abstract class ArmyManager : MonoBehaviour
     //all enemies
     public List<ArmyElement> GetAllEnemies(bool sortRandom)
     {
-        var enemies = GameObject.FindObjectsOfType<ArmyElement>().Where(element => !element.gameObject.CompareTag(m_ArmyTag)).ToList();
-        if (sortRandom) enemies.Sort((a, b) => Random.value.CompareTo(.5f));
+        var enemies = GameObject
+            .FindObjectsOfType<ArmyElement>()
+            .Where(element => !element.gameObject.CompareTag(m_ArmyTag))
+            .ToList();
+        if (sortRandom)
+            enemies.Sort((a, b) => Random.value.CompareTo(.5f));
         return enemies;
     }
 
-    public List<ArmyElement> GetAllEnemiesOfType<T>(bool sortRandom) where T : ArmyElement
+    public List<ArmyElement> GetAllEnemiesOfType<T>(bool sortRandom)
+        where T : ArmyElement
     {
-        var enemies = GetAllEnemies(sortRandom).Where(  element=>   (element is T)
-                                                        && !element.gameObject.CompareTag(m_ArmyTag)).ToList();
+        var enemies = GetAllEnemies(sortRandom)
+            .Where(element => (element is T) && !element.gameObject.CompareTag(m_ArmyTag))
+            .ToList();
         return enemies;
     }
 
-    public List<ArmyElement> GetAllEnemiesByDistance(bool sortRandom, Vector3 centerPos, float minRadius, float maxRadius)
+    public List<ArmyElement> GetAllEnemiesByDistance(
+        bool sortRandom,
+        Vector3 centerPos,
+        float minRadius,
+        float maxRadius
+    )
     {
-        var enemies = GetAllEnemies(sortRandom).Where(
-            item => Vector3.Distance(centerPos, item.transform.position) > minRadius
-                    && Vector3.Distance(centerPos, item.transform.position) < maxRadius).ToList();
+        var enemies = GetAllEnemies(sortRandom)
+            .Where(
+                item =>
+                    Vector3.Distance(centerPos, item.transform.position) > minRadius
+                    && Vector3.Distance(centerPos, item.transform.position) < maxRadius
+            )
+            .ToList();
         return enemies;
     }
 
-    public List<ArmyElement> GetAllEnemiesOfTypeByDistance<T>(bool sortRandom, Vector3 centerPos, float minRadius, float maxRadius) where T : ArmyElement
+    public List<ArmyElement> GetAllEnemiesOfTypeByDistance<T>(
+        bool sortRandom,
+        Vector3 centerPos,
+        float minRadius,
+        float maxRadius
+    )
+        where T : ArmyElement
     {
-        var enemies = GetAllEnemiesOfType<T>(sortRandom).Where(
-            item => Vector3.Distance(centerPos, item.transform.position) > minRadius
-                    && Vector3.Distance(centerPos, item.transform.position) < maxRadius).ToList();
+        var enemies = GetAllEnemiesOfType<T>(sortRandom)
+            .Where(
+                item =>
+                    Vector3.Distance(centerPos, item.transform.position) > minRadius
+                    && Vector3.Distance(centerPos, item.transform.position) < maxRadius
+            )
+            .ToList();
         return enemies;
     }
 
@@ -116,7 +174,8 @@ public abstract class ArmyManager : MonoBehaviour
         return enemies.FirstOrDefault()?.gameObject;
     }
 
-    public GameObject GetRandomEnemyOfType<T>() where T: ArmyElement
+    public GameObject GetRandomEnemyOfType<T>()
+        where T : ArmyElement
     {
         var enemies = GetAllEnemiesOfType<T>(true);
         return enemies.FirstOrDefault()?.gameObject;
@@ -124,20 +183,24 @@ public abstract class ArmyManager : MonoBehaviour
 
     public GameObject GetRandomEnemyByDistance(Vector3 centerPos, float minRadius, float maxRadius)
     {
-        var enemies = GetAllEnemiesByDistance(true,centerPos,minRadius,maxRadius);
+        var enemies = GetAllEnemiesByDistance(true, centerPos, minRadius, maxRadius);
         return enemies.FirstOrDefault()?.gameObject;
     }
 
-
-    public GameObject GetRandomEnemyOfTypeByDistance<T>(Vector3 centerPos, float minRadius, float maxRadius) where T : ArmyElement
+    public GameObject GetRandomEnemyOfTypeByDistance<T>(
+        Vector3 centerPos,
+        float minRadius,
+        float maxRadius
+    )
+        where T : ArmyElement
     {
         var enemies = GetAllEnemiesOfTypeByDistance<T>(true, centerPos, minRadius, maxRadius);
         return enemies.FirstOrDefault()?.gameObject;
     }
     #endregion
 
-    protected void ComputeStatistics(ref int nDrones,ref int nTurrets,ref int cumulatedHealth)
-	{
+    protected void ComputeStatistics(ref int nDrones, ref int nTurrets, ref int cumulatedHealth)
+    {
         nDrones = m_ArmyElements.Count(item => item is Drone);
         nTurrets = m_ArmyElements.Count(item => item is Turret);
         cumulatedHealth = (int)m_ArmyElements.Sum(item => item.Health);
@@ -162,12 +225,14 @@ public abstract class ArmyManager : MonoBehaviour
     }
 
     protected void RefreshHudDisplay()
-	{
-        int nDrones=0, nTurrets=0, health=0;
+    {
+        int nDrones = 0,
+            nTurrets = 0,
+            health = 0;
         ComputeStatistics(ref nDrones, ref nTurrets, ref health);
 
         m_NDronesText.text = nDrones.ToString();
-        m_NTurretsText.text = nTurrets.ToString() ;
+        m_NTurretsText.text = nTurrets.ToString();
         m_HealthText.text = health.ToString();
     }
 
@@ -176,9 +241,9 @@ public abstract class ArmyManager : MonoBehaviour
         m_ArmyElements.Remove(go.GetComponent<IArmyElement>());
         RefreshHudDisplay();
 
-        if (m_ArmyElements.Count == 0 & m_OnArmyIsDead!=null) m_OnArmyIsDead.Invoke();
+        if (m_ArmyElements.Count == 0 & m_OnArmyIsDead != null)
+            m_OnArmyIsDead.Invoke();
     }
-    
 }
 
 
@@ -192,7 +257,7 @@ public abstract class ArmyManager : MonoBehaviour
 public GameObject GetRandomNonTargetedEnemy<T>() where T : ArmyElement
 {
     var enemies = GetAllEnemiesOfType<T>(true);
-    return enemies.Where(item => 
+    return enemies.Where(item =>
             !m_DicoWhoTargetsWhom.ContainsValue(item.gameObject)
             ).FirstOrDefault()?.gameObject;
 }

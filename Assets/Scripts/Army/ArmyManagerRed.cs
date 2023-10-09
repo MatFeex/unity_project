@@ -15,18 +15,6 @@ public class ArmyManagerRed : ArmyManager
 
     private List<ArmyElement> initialEnemyTurrets = null;
 
-    public override GameObject GetFirstDrone()
-    {
-        var enemies = GetAllEnemiesOfType<Drone>(false);
-        return enemies.FirstOrDefault()?.gameObject;
-    }
-
-    public override GameObject GetTargetOfType<T>()
-    {
-        var enemies = GetAllEnemiesOfType<T>(false);
-        return enemies.FirstOrDefault()?.gameObject;
-    }
-
     public override GameObject GetTurretTarget()
     {
         initialEnemyTurrets =
@@ -41,13 +29,11 @@ public class ArmyManagerRed : ArmyManager
         if (!allTurretsShouldBeDead) // on tire d'abord sur les tourelles
         {
             targetIndex = (int)Math.Floor((double)cpt / 10);
-
             if (cpt > initialTurretNb * 10)
             {
                 Debug.Log("All turrets should be dead");
                 allTurretsShouldBeDead = true;
             }
-
             cpt++;
             try
             {
@@ -75,14 +61,64 @@ public class ArmyManagerRed : ArmyManager
             return null;
         }
 
-        enemies.Sort(
-            (a, b) =>
-                Vector3
-                    .Distance(centerPos, a.transform.position)
-                    .CompareTo(Vector3.Distance(centerPos, b.transform.position))
-        );
+        return enemies.FirstOrDefault().gameObject;
 
-        return enemies[0].gameObject;
+        // enemies.Sort(
+        //     (a, b) =>
+        //         Vector3
+        //             .Distance(centerPos, a.transform.position)
+        //             .CompareTo(Vector3.Distance(centerPos, b.transform.position))
+        // );
+
+        // double minDistance = 10000;
+        // ArmyElement target = enemies.FirstOrDefault();
+        // foreach (ArmyElement e in enemies)
+        // {
+        // 	float currentDist = Vector3.Distance(centerPos, e.transform.position);
+        //     if (currentDist < minDistance) {
+        // 		minDistance = currentDist;
+        // 		target = e;
+        // 	}
+        // }
+
+        // return target.gameObject;
+    }
+
+    public override GameObject GetDroneTarget(Vector3 centerPos)
+    {
+        var enemies = GetAllEnemiesOfType<Drone>(false);
+        float minDistance = 1000;
+        ArmyElement target = enemies.FirstOrDefault();
+        foreach (ArmyElement e in enemies)
+        {
+            float currentDist = Vector3.Distance(centerPos, e.transform.position);
+            if (currentDist < minDistance)
+            {
+                minDistance = currentDist;
+                target = e;
+            }
+        }
+
+        return target.gameObject;
+    }
+
+    public override GameObject GetTargetOfType<T>() where T: ArmyElement {
+        var enemies = GetAllEnemiesOfType<T>();
+        return enemies.FirstOrDefault().gameObject;
+    }
+
+    public override GameObject GetTurretToProtect(ArmyElement caller)
+    {
+        var AlliesTurret = GetAllAllies(true, caller)
+            .Where(element => (element is Turret))
+            .ToList();
+
+        if (AlliesTurret.Count > 0)
+        {
+			var enemies = GetAllEnemiesOfTypeByDistance<Drone>(false, AlliesTurret.FirstOrDefault().gameObject.transform.position, 0, 10);
+			return enemies.Count > 0 ? enemies.FirstOrDefault()?.gameObject : null;
+        }
+        return null;
     }
 
     public override void ArmyElementHasBeenKilled(GameObject go)
