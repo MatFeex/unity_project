@@ -41,12 +41,16 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             if((Time.frameCount % nObjects) ==index)
                 SetDestination(target.Value.position);
 
-            // GameObject closestEnemy = m_ArmyElement.ArmyManager.GetClosestEnemyInRadius(transform.position, 1);
+            if (m_ArmyElement.ArmyManager.AllTurretsAreDead())
+            {
+                GameObject closestEnemy = m_ArmyElement.ArmyManager.GetClosestEnemyInRadius(transform.position, 5);
 
-            // if (closestEnemy != null) {
-            //     // Debug.Log($"Enemy in range, changing target {closestEnemy}");
-            //     target.Value = closestEnemy.transform;
-            // }
+                if (closestEnemy != null) {
+                    // Debug.Log($"Enemy in range, changing target {closestEnemy}");
+                    target.Value = closestEnemy.transform;
+                    Debug.Log("On change de cible car on a croisé un boug");
+                }
+            }
 
             return TaskStatus.Running;
         }

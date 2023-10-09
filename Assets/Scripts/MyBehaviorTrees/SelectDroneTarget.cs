@@ -19,7 +19,13 @@ public class SelectDroneTarget : Action
 	{
 		if (m_ArmyElement.ArmyManager == null) return TaskStatus.Running; // la r�f�rence � l'arm�e n'a pas encore �t� inject�e
 
-		target.Value = m_ArmyElement.ArmyManager.GetDroneTarget(transform.position)?.transform;
+		if (target.Value != null)
+		{
+			return TaskStatus.Success;
+		}
+
+		target.Value = m_ArmyElement.ArmyManager.GetDroneTarget()?.transform;
+		// Debug.Log($"This = {this.transform}");
 
 		if (target.Value != null) return TaskStatus.Success;
 		else return TaskStatus.Failure;
