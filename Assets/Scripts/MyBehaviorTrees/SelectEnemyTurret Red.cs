@@ -24,6 +24,7 @@ public class SelectEnemyTurretRed : Action
 		if (m_ArmyElement.ArmyManager == null) return TaskStatus.Running; // la r�f�rence � l'arm�e n'a pas encore �t� inject�e
 
 		target.Value = m_ArmyElement.ArmyManager.Test()?.transform;	
+		Debug.Log(m_ArmyElement.ArmyManager.Test()?.transform, this.gameObject);
 
 		if (target.Value != null) return TaskStatus.Success;
 		else return TaskStatus.Failure;
