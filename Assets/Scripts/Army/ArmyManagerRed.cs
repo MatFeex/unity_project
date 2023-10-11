@@ -13,11 +13,14 @@ public class ArmyManagerRed : ArmyManager
     private bool allTurretsShouldBeDead = false;
     private List<ArmyElement> initialEnemyTurrets = null;
 
-    public override bool AllTurretsAreDead() {
+    public override bool AllTurretsAreDead()
+    // pour savoir si toutes les tourelles ennemies sont mortes
+    {
         return GetAllEnemiesOfType<Turret>(false).Count == 0;
-    } 
+    }
 
     public override GameObject GetTurretTarget()
+    // donne la meme cible à toutes les tourelles et tire 10 coup dessus
     {
         initialEnemyTurrets =
             (initialEnemyTurrets == null)
@@ -27,13 +30,11 @@ public class ArmyManagerRed : ArmyManager
         var enemies = initialEnemyTurrets;
         int targetIndex = 0;
 
-
-        if (!allTurretsShouldBeDead) // on tire d'abord sur les tourelles
+        if (!allTurretsShouldBeDead)
         {
-            targetIndex = (int)Math.Floor((double)cpt / 10);
-            if (cpt > initialEnemyTurrets.Count * 10)
+            targetIndex = (int)Math.Floor((double)cpt / 10); // on récupère un indice qui prend 1 tout les 10
+            if (cpt > initialEnemyTurrets.Count * 10) // si on a tiré 10 fois sur cahque tourelles, on estime qu'on a fini de tirer sur les tourelles
             {
-                Debug.Log("All turrets should be dead");
                 allTurretsShouldBeDead = true;
             }
             cpt++;
@@ -46,19 +47,17 @@ public class ArmyManagerRed : ArmyManager
                 return null;
             }
         }
-        else // une fois qu'elles sont censées etre toutes dead, on tire sur les drones
-        {
-            // return GetRandomEnemyOfType<Drone>().gameObject;
-            return null;
-        }
+        return null;
     }
 
     public override GameObject GetDroneTarget()
+    // donne une cible randomde type turret aux drones
     {
         return GetRandomEnemyOfType<Turret>()?.gameObject;
     }
 
-    public override GameObject GetClosestEnemyInRadius(Vector3 centerPos, float radius)
+    public override GameObject GetEnemyInRadius(Vector3 centerPos, float radius)
+    // retourne un ennemi dans le raius donné s'il existe, null sinon
     {
         List<ArmyElement> enemies = GetAllEnemies(false)
             .Where(item => Vector3.Distance(centerPos, item.transform.position) < radius)
@@ -70,15 +69,7 @@ public class ArmyManagerRed : ArmyManager
         }
 
         return enemies.FirstOrDefault().gameObject;
-        
     }
-
-
-
-
-
-
-
 
     public override void ArmyElementHasBeenKilled(GameObject go)
     {

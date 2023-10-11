@@ -39,7 +39,7 @@ public abstract class ArmyManager : MonoBehaviour
         return null;
     }
 
-    public virtual GameObject GetClosestEnemyInRadius(Vector3 centerPos, float radius)
+    public virtual GameObject GetEnemyInRadius(Vector3 centerPos, float radius)
     {
         return null;
     }

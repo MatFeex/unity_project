@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
-    [TaskDescription("Seek the target specified using the Unity NavMesh.")]
+    [TaskDescription("Seek the target specified using the Unity NavMesh, the drone will attack any near ennemy (in detectionRatio) when all enenmy turrets are dead")]
     [TaskCategory("Movement")]
     [HelpURL("https://www.opsive.com/support/documentation/behavior-designer-movement-pack/")]
     [TaskIcon("Assets/Behavior Designer Movement/Editor/Icons/{SkinColor}SeekIcon.png")]
@@ -10,51 +10,58 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
     {
         [Tooltip("The GameObject that the agent is seeking")]
         public SharedTransform target;
-	    IArmyElement m_ArmyElement;
+        public SharedFloat detectionRadius;
+        IArmyElement m_ArmyElement;
 
         int index;
         static int nObjects = 0;
-		public override void OnAwake()
-		{
-			base.OnAwake();
+
+        public override void OnAwake()
+        {
+            base.OnAwake();
             index = nObjects++;
 
-            m_ArmyElement =(IArmyElement) GetComponent(typeof(IArmyElement));
-		}
+            m_ArmyElement = (IArmyElement)GetComponent(typeof(IArmyElement));
+        }
 
-		public override void OnStart()
+        public override void OnStart()
         {
             base.OnStart();
             navMeshAgent.stoppingDistance = arriveDistance.Value; // DAVID B. le 31/12/2023, je ne sais pas pourquoi il manque ce setup dans la classe NavMeshMovement
-            if (target.Value)SetDestination(target.Value.position);
-
+            if (target.Value)
+                SetDestination(target.Value.position);
         }
 
         // Seek the destination. Return success once the agent has reached the destination.
         // Return running if the agent hasn't reached the destination yet
         public override TaskStatus OnUpdate()
         {
-            if (target.Value == null) return TaskStatus.Failure;
+            if (target.Value == null)
+                return TaskStatus.Failure;
 
-            if (HasArrived()) return TaskStatus.Success;
+            if (HasArrived())
+                return TaskStatus.Success;
 
-            if((Time.frameCount % nObjects) ==index)
+            if ((Time.frameCount % nObjects) == index)
                 SetDestination(target.Value.position);
 
-            if (m_ArmyElement.ArmyManager.AllTurretsAreDead())
+            if (m_ArmyElement.ArmyManager.AllTurretsAreDead()) 
+            // si toutes les tourelles ennemis sont mortes, on attaque les drones qu'on croise dans un rayon donné
             {
-                GameObject closestEnemy = m_ArmyElement.ArmyManager.GetClosestEnemyInRadius(transform.position, 5);
+                GameObject closestEnemy = m_ArmyElement.ArmyManager.GetEnemyInRadius(
+                    transform.position,
+                    detectionRadius.Value
+                );
 
-                if (closestEnemy != null) {
-                    // Debug.Log($"Enemy in range, changing target {closestEnemy}");
+                if (closestEnemy != null)
+                {
                     target.Value = closestEnemy.transform;
-                    Debug.Log("On change de cible car on a croisé un boug");
                 }
             }
 
             return TaskStatus.Running;
         }
-        
+
         public override void OnReset()
         {
             base.OnReset();

@@ -3,7 +3,7 @@ using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 
 [TaskCategory("MyTasks")]
-[TaskDescription("Select non targeted enemy Drone")]
+[TaskDescription("Select a turret target, cycling through all enemy turrets and shooting 10 times on each")]
 
 public class SelectTurretTarget : Action
 {
