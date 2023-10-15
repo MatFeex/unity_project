@@ -19,7 +19,7 @@ public class TurretShoot: Action
 	{
 		if (turret!= null && target.Value != null)
 		{
-			turret.Shoot(target.Value.position);			
+			turret.Shoot(target.Value.position);		
 			return TaskStatus.Success;
 		}
 		else return TaskStatus.Failure;
